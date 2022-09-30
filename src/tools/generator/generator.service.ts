@@ -6,7 +6,7 @@ import * as fs from 'fs';
 import { renderFile } from 'ejs';
 import { GeneratorMenuOptions } from './domain/types';
 import { Tool } from '../../shared/types';
-import { sentenceCase, validateOrThrowError } from '../../shared/utils';
+import { validateOrThrowError } from '../../shared/utils';
 import * as caseModifiers from '../../shared/utils/case-modifiers';
 import * as availableSchematics from './schematics';
 import { Schematic } from '../../shared/types/models/schematic.model';
@@ -40,15 +40,15 @@ export class GeneratorService {
     options: GeneratorMenuOptions,
   ) {
     for (const template of schematic.templates) {
-      const label = sentenceCase(template.name);
-      this.spinner.start(`processing file: ${label}!`);
-      const outputFilePath = template.outputPath.replace(
-        '%FILE_NAME%',
-        caseModifiers.kebabCase(options.moduleName),
-      );
+      this.spinner.start(`processing file: ${template.name}!`);
+      const outputFilePath = template.outputPath
+        .replace('%FILE_NAME%', caseModifiers.kebabCase(options.moduleName))
+        .replace('%MODULE_NAME%', options.moduleName)
+        .replace('%PACKAGE_NAME%', options.packageName);
+
       const fileExists = fs.existsSync(join(process.cwd(), outputFilePath));
       if (fileExists) {
-        this.spinner.fail(`${label} file already exists`);
+        this.spinner.fail(`${template.name} file already exists`);
         continue;
       }
       const templateVariables = {
@@ -64,7 +64,7 @@ export class GeneratorService {
       this.createFoldersFromStringPath(outputFilePath);
       fs.writeFileSync(outputFilePath, fileString);
 
-      this.spinner.succeed(`${label} created successfully!`);
+      this.spinner.succeed(`${template.name} created successfully!`);
     }
   }
 

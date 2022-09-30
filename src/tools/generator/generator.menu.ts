@@ -2,7 +2,6 @@ import { Question, QuestionSet } from 'nest-commander';
 import { Tool } from '../../shared/types';
 import { GeneratorMenuOptions } from './domain/types';
 import * as availableSchematics from './schematics';
-import { sentenceCase } from '../../shared/utils';
 
 @QuestionSet({ name: Tool.GENERATOR })
 export class GeneratorMenu {
@@ -33,7 +32,7 @@ export class GeneratorMenu {
     type: 'list',
     validate: (input: string) => Boolean(input),
     choices: Object.values(availableSchematics).map((schematic) => ({
-      name: sentenceCase(schematic.name),
+      name: schematic.name,
       value: schematic.name,
     })),
   })
