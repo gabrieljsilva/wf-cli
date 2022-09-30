@@ -13,31 +13,34 @@ export class GeneratorCommander extends CommandRunner {
   }
 
   async run(args: string[], options: GeneratorMenuOptions) {
-    const { packageName, moduleName, schema } = options;
-    if (packageName && moduleName && schema) {
+    const { packageName, moduleName, schematic } = options;
+    if (packageName && moduleName && schematic) {
       return await this.generatorService.generateSchema(options);
     }
     return this.generatorService.showGeneratorMenu(options);
   }
 
   @Option({
-    flags: '-p, --package-name, [packageName]',
+    name: 'packageName',
+    flags: '-p, --package-name, <string>',
   })
   packageName(value: string) {
     return value;
   }
 
   @Option({
-    flags: '-m, --module-name, [moduleName]',
+    name: 'moduleName',
+    flags: '-m, --module-name, <string>',
   })
   moduleName(value: string) {
     return value;
   }
 
   @Option({
-    flags: '-s, --schema, [schema]',
+    name: 'schematic',
+    flags: '-s, --schematic, <string>',
   })
-  schema(value: string) {
+  schematic(value: string) {
     return value;
   }
 }

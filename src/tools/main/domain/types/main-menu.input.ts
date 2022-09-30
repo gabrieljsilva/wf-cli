@@ -1,5 +1,5 @@
 import { Tool } from '../../../../shared/types';
 
-export interface MainMenuInputInterface {
+export interface MainMenuInput {
   tool: Tool;
 }

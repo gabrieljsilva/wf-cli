@@ -4,10 +4,12 @@ import { GeneratorMenuOptions } from './domain/types/generator-menu-options.inte
 @Injectable()
 export class GeneratorService {
   async showGeneratorMenu(options: Partial<GeneratorMenuOptions>) {
+    console.log(options);
     console.log('Showing generator menu');
   }
 
   async generateSchema(options: GeneratorMenuOptions) {
+    console.log(options);
     console.log('Generating Schema');
   }
 
