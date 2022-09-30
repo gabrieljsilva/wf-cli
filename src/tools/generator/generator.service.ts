@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { GeneratorMenuOptions } from './domain/types';
 import { InquirerService } from 'nest-commander';
 import { Tool } from '../../shared/types';
+import { validateOrThrowError } from '../../shared/utils';
 
 @Injectable()
 export class GeneratorService {
@@ -11,7 +12,7 @@ export class GeneratorService {
       Tool.GENERATOR,
       options,
     );
-
+    await validateOrThrowError(options, GeneratorMenuOptions);
     await this.generateSchema(options);
   }
 

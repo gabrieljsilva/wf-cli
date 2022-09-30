@@ -2,7 +2,6 @@ import { Command, CommandRunner, Option } from 'nest-commander';
 import { Tool } from '../../shared/types';
 import { GeneratorMenuOptions } from './domain/types';
 import { GeneratorService } from './generator.service';
-import { validateOrThrowError } from '../../shared/utils';
 
 @Command({
   name: Tool.GENERATOR,
@@ -14,7 +13,6 @@ export class GeneratorCommander extends CommandRunner {
   }
 
   async run(args: string[], options: GeneratorMenuOptions) {
-    await validateOrThrowError(options, GeneratorMenuOptions);
     return this.generatorService.showGeneratorMenu(options);
   }
 

@@ -7,6 +7,7 @@ export class GeneratorMenu {
     name: 'packageName',
     message: 'What is the package name?',
     type: 'input',
+    validate: (input: string) => Boolean(input),
   })
   packageName(value: string) {
     return value;
@@ -16,6 +17,7 @@ export class GeneratorMenu {
     name: 'moduleName',
     message: 'What is the module name?',
     type: 'input',
+    validate: (input: string) => Boolean(input),
   })
   moduleName(value: string) {
     return value;
@@ -25,6 +27,7 @@ export class GeneratorMenu {
     name: 'schematic',
     message: 'What is the schematic?',
     type: 'input',
+    validate: (input: string) => Boolean(input),
   })
   schematic(value: string) {
     return value;
