@@ -1,6 +1,6 @@
 import { Command, CommandRunner, Option } from 'nest-commander';
 import { Tool } from '../../shared/types';
-import { CommandOptionsInterface } from './domain';
+import { MainMenuOptions } from './domain';
 import { MainService } from './main.service';
 
 @Command({
@@ -12,7 +12,7 @@ export class MainCommander extends CommandRunner {
     super();
   }
 
-  async run(args: string[], options: CommandOptionsInterface) {
+  async run(args: string[], options: MainMenuOptions) {
     const { tool } = options;
     tool
       ? await this.mainService.executeToolCLI(tool)

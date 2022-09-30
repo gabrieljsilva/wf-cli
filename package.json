@@ -8,7 +8,8 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
-    "main:dev": "ts-node ./src/main.ts main"
+    "main:dev": "ts-node ./src/main.ts main",
+    "generator:dev": "ts-node ./src/main.ts generator"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
