@@ -1,22 +1,22 @@
 import { IsNotEmpty, IsString, IsNotIn, IsOptional } from 'class-validator';
 
-const invalidEntries = ['-s', '-m', '-p', '-s ', '-m ', '-p '];
+const generatorInvalidOptions = ['-s', '-m', '-p', '-s ', '-m ', '-p '];
 
 export class GeneratorMenuOptions {
   @IsString()
   @IsNotEmpty()
-  @IsNotIn(invalidEntries)
+  @IsNotIn(generatorInvalidOptions)
   @IsOptional()
   packageName: string;
 
   @IsString()
-  @IsNotIn(invalidEntries)
+  @IsNotIn(generatorInvalidOptions)
   @IsNotEmpty()
   @IsOptional()
   moduleName: string;
 
   @IsString()
-  @IsNotIn(invalidEntries)
+  @IsNotIn(generatorInvalidOptions)
   @IsNotEmpty()
   @IsOptional()
   schematic: string;

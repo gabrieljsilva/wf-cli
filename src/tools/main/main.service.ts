@@ -14,7 +14,7 @@ export class MainService {
   async showMainMenu() {
     const { tool } = await this.inquirerService.ask<MainMenuInput>(
       Tool.MAIN,
-      {},
+      undefined,
     );
 
     const commander = this.getCommanderInstanceByName(tool);

@@ -15,10 +15,6 @@ export class GeneratorCommander extends CommandRunner {
 
   async run(args: string[], options: GeneratorMenuOptions) {
     await validateOrThrowError(options, GeneratorMenuOptions);
-    const { packageName, moduleName, schematic } = options;
-    if (packageName && moduleName && schematic) {
-      return await this.generatorService.generateSchema(options);
-    }
     return this.generatorService.showGeneratorMenu(options);
   }
 
