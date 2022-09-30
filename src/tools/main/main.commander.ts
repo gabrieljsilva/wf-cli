@@ -15,8 +15,8 @@ export class MainCommander extends CommandRunner {
   async run(args: string[], options: CommandOptionsInterface) {
     const { tool } = options;
     tool
-      ? this.mainService.executeToolCLI(tool)
-      : this.mainService.showMainMenu();
+      ? await this.mainService.executeToolCLI(tool)
+      : await this.mainService.showMainMenu();
   }
 
   @Option({

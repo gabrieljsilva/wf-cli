@@ -1,13 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { Tool } from '../../shared/types';
+import { InquirerService } from 'nest-commander';
 
 @Injectable()
 export class MainService {
-  showMainMenu() {
-    console.log('Showing main menu');
+  constructor(private readonly inquirerService: InquirerService) {}
+
+  async showMainMenu() {
+    const result = await this.inquirerService.ask(Tool.MAIN, {});
+    console.log(result);
   }
 
-  executeToolCLI(tool: Tool) {
+  async executeToolCLI(tool: Tool) {
     console.log(`executing ${tool} commander`);
   }
 }
