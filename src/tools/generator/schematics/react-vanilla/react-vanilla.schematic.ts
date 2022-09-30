@@ -4,11 +4,11 @@ import { join } from 'path';
 
 export const reactVanillaSchematic = new Schematic({
   name: 'react-vanilla',
-  templates: {
-    SCREEN: new SchematicTemplate({
+  templates: [
+    new SchematicTemplate({
       name: 'Screen',
       inputPath: join(__dirname, './templates/template.screen.ejs'),
       outputPath: 'src/screens/%FILE_NAME%.screen.tsx',
     }),
-  },
+  ],
 });
