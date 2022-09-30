@@ -18,7 +18,7 @@ export class MainService {
     );
 
     const commander = this.getCommanderInstanceByName(tool);
-    await commander.run([]);
+    await commander.run([], {});
   }
 
   async executeToolCLI(tool: Tool) {
