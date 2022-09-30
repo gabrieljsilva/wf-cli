@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { GeneratorMenuOptions } from './domain/types/generator-menu-options.interface';
+import { GeneratorMenuOptions } from './domain/types';
 
 @Injectable()
 export class GeneratorService {
