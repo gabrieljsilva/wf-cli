@@ -2,14 +2,16 @@
   "name": "wf-cli",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": "gabrieldjs21",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
+    "main": "node dist/main.js main",
     "main:dev": "ts-node ./src/main.ts main",
-    "generator:dev": "ts-node ./src/main.ts generator"
+    "generator:dev": "ts-node ./src/main.ts generator",
+    "generator": "node dist/main.js generator"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
