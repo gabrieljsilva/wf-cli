@@ -1,8 +1,8 @@
 import { Question, QuestionSet } from 'nest-commander';
-import { Tool } from '../../shared/types';
+import { Menu, Tool } from '../../shared/types';
 import { TOOLSETS } from './domain/constants';
 
-@QuestionSet({ name: Tool.MAIN })
+@QuestionSet({ name: Menu.MAIN })
 export class MainMenu {
   @Question({
     message: 'Which tool set do you want to run?',

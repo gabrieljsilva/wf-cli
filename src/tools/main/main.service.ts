@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Tool } from '../../shared/types';
+import { Menu, Tool } from '../../shared/types';
 import { CommandRunner, InquirerService } from 'nest-commander';
 import { GeneratorCommander } from '../generator';
 import { MainMenuInput } from './domain';
@@ -13,7 +13,7 @@ export class MainService {
 
   async showMainMenu() {
     const { tool } = await this.inquirerService.ask<MainMenuInput>(
-      Tool.MAIN,
+      Menu.MAIN,
       undefined,
     );
 

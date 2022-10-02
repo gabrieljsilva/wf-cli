@@ -5,7 +5,7 @@ import * as ora from 'ora';
 import * as fs from 'fs';
 import { renderFile } from 'ejs';
 import { GeneratorMenuOptions, SelectTemplateMenuOptions } from './domain';
-import { Tool } from '../../shared/types';
+import { Menu } from '../../shared/types';
 import { validateOrThrowError } from '../../shared/utils';
 import * as caseModifiers from '../../shared/utils/case-modifiers';
 import * as availableSchematics from './schematics';
@@ -18,7 +18,7 @@ export class GeneratorService {
   constructor(private readonly inquirerService: InquirerService) {}
   async showGeneratorMenu(options: GeneratorMenuOptions) {
     options &&= await this.inquirerService.ask<GeneratorMenuOptions>(
-      Tool.GENERATOR,
+      Menu.GENERATOR,
       options,
     );
     await validateOrThrowError(options, GeneratorMenuOptions);
@@ -40,9 +40,10 @@ export class GeneratorService {
     options: GeneratorMenuOptions,
   ) {
     const { templates } =
-      await this.inquirerService.ask<SelectTemplateMenuOptions>('SELECT-MENU', {
-        context: { schematic },
-      });
+      await this.inquirerService.ask<SelectTemplateMenuOptions>(
+        Menu.SELECT_TEMPLATES,
+        { context: { schematic } },
+      );
 
     for (const template of templates) {
       this.spinner.start(`processing file: ${template.name}!`);
@@ -69,7 +70,7 @@ export class GeneratorService {
       );
       this.spinner.succeed(`Saving file: ${outputFilePath} `);
 
-      this.createFoldersFromStringPath(outputFilePath);
+      this.createFoldersFromPathString(outputFilePath);
       fs.writeFileSync(outputFilePath, fileString);
 
       this.spinner.succeed(`${template.name} created successfully!`);
@@ -84,7 +85,7 @@ export class GeneratorService {
     );
   }
 
-  createFoldersFromStringPath(string: string) {
+  createFoldersFromPathString(string: string) {
     const paths = string.split('/');
     paths.pop();
     const foldersPaths = paths.join('/');

@@ -1,9 +1,10 @@
 import { Question, QuestionSet } from 'nest-commander';
+import { Menu } from '../../../../shared/types';
 
-@QuestionSet({ name: 'SELECT-MENU' })
+@QuestionSet({ name: Menu.SELECT_TEMPLATES })
 export class SelectTemplateMenu {
   @Question({
-    message: 'Select the templates you want to generate',
+    message: 'Select the templates you want to generate: ',
     name: 'templates',
     type: 'checkbox',
     choices: ({ context }) =>
