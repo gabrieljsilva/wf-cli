@@ -4,7 +4,7 @@ import { join } from 'path';
 import * as ora from 'ora';
 import * as fs from 'fs';
 import { renderFile } from 'ejs';
-import { GeneratorMenuOptions } from './domain/types';
+import { GeneratorMenuOptions, SelectTemplateMenuOptions } from './domain';
 import { Tool } from '../../shared/types';
 import { validateOrThrowError } from '../../shared/utils';
 import * as caseModifiers from '../../shared/utils/case-modifiers';
@@ -28,7 +28,7 @@ export class GeneratorService {
   async generateFilesBySchematic(options: GeneratorMenuOptions) {
     const schematic = this.getSchematicByName(options.schematic);
     if (!schematic) {
-      console.error(`cannot find schematic: ${options.schematic}`);
+      this.spinner.fail(`cannot find schematic: ${options.schematic}`);
       process.exit(1);
     }
 
@@ -39,12 +39,20 @@ export class GeneratorService {
     schematic: Schematic,
     options: GeneratorMenuOptions,
   ) {
-    for (const template of schematic.templates) {
+    const { templates } =
+      await this.inquirerService.ask<SelectTemplateMenuOptions>('SELECT-MENU', {
+        context: { schematic },
+      });
+
+    for (const template of templates) {
       this.spinner.start(`processing file: ${template.name}!`);
       const outputFilePath = template.outputPath
         .replace('%FILE_NAME%', caseModifiers.kebabCase(options.moduleName))
-        .replace('%MODULE_NAME%', options.moduleName)
-        .replace('%PACKAGE_NAME%', options.packageName);
+        .replace('%MODULE_NAME%', caseModifiers.kebabCase(options.moduleName))
+        .replace(
+          '%PACKAGE_NAME%',
+          caseModifiers.kebabCase(options.packageName),
+        );
 
       const fileExists = fs.existsSync(join(process.cwd(), outputFilePath));
       if (fileExists) {
@@ -59,7 +67,7 @@ export class GeneratorService {
         template.inputPath,
         templateVariables,
       );
-      this.spinner.succeed(`saving file: ${outputFilePath} `);
+      this.spinner.succeed(`Saving file: ${outputFilePath} `);
 
       this.createFoldersFromStringPath(outputFilePath);
       fs.writeFileSync(outputFilePath, fileString);

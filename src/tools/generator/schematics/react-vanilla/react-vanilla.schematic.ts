@@ -3,7 +3,7 @@ import { SchematicTemplate } from '../../../../shared/types/models/schematic-tem
 import { join } from 'path';
 
 export const reactVanillaSchematic = new Schematic({
-  name: 'react-vanilla',
+  name: 'React Vanilla',
   templates: [
     new SchematicTemplate({
       name: 'Screen',

@@ -1,6 +1,6 @@
 import { Command, CommandRunner, Option } from 'nest-commander';
 import { Tool } from '../../shared/types';
-import { GeneratorMenuOptions } from './domain/types';
+import { GeneratorMenuOptions } from './domain';
 import { GeneratorService } from './generator.service';
 
 @Command({

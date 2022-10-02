@@ -1,7 +1,7 @@
 import { Question, QuestionSet } from 'nest-commander';
-import { Tool } from '../../shared/types';
-import { GeneratorMenuOptions } from './domain/types';
-import * as availableSchematics from './schematics';
+import { Tool } from '../../../../shared/types';
+import { GeneratorMenuOptions } from '../types';
+import * as availableSchematics from '../../schematics';
 
 @QuestionSet({ name: Tool.GENERATOR })
 export class GeneratorMenu {
