@@ -5,6 +5,9 @@
   "author": "gabrieldjs21",
   "private": true,
   "license": "UNLICENSED",
+  "bin": {
+    "wf-cli": "./dist/main.js"
+  },
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
