@@ -8,7 +8,7 @@ export const reactVanillaSchematic = new Schematic({
     new SchematicTemplate({
       name: 'Screen',
       inputPath: join(__dirname, './templates/template.screen.ejs'),
-      outputPath: 'src/screens/%FILE_NAME%.screen.tsx',
+      outputPath: 'src/screens/%MODULE_NAME%.screen.tsx',
     }),
   ],
 });

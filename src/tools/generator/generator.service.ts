@@ -48,7 +48,6 @@ export class GeneratorService {
     for (const template of templates) {
       this.spinner.start(`processing file: ${template.name}!`);
       const outputFilePath = template.outputPath
-        .replace('%FILE_NAME%', caseModifiers.kebabCase(options.moduleName))
         .replace('%MODULE_NAME%', caseModifiers.kebabCase(options.moduleName))
         .replace(
           '%PACKAGE_NAME%',

@@ -8,13 +8,13 @@ export const nestGraphqlSchematic = new Schematic({
       name: 'Service',
       inputPath: join(__dirname, './templates/template.service.ejs'),
       outputPath:
-        'src/packages/%PACKAGE_NAME%/%MODULE_NAME%/%FILE_NAME%.service.ts',
+        'src/packages/%PACKAGE_NAME%/%MODULE_NAME%/%MODULE_NAME%.service.ts',
     },
     {
       name: 'Module',
       inputPath: join(__dirname, './templates/template.module.ejs'),
       outputPath:
-        'src/packages/%PACKAGE_NAME%/%MODULE_NAME%/%FILE_NAME%.module.ts',
+        'src/packages/%PACKAGE_NAME%/%MODULE_NAME%/%MODULE_NAME%.module.ts',
     },
   ],
 });

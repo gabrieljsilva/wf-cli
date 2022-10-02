@@ -1,73 +1,98 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# WF-CLI
+Automate your workflow using this CLI.
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Features
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+- Module Generator
+- Git Utilities
+- Project Scaffolder
 
-## Description
+## Module Generator
+Usando esta ferramenta você pode criar módulos inteiros a partir de templates renderizados com EJS.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+### Criando o primeiro template
+Para começar a criar os templates dos seus módulos você precisa apenas criar uma pasta no diretório src/tools/generator/schematics.
+Dentro dessa pasta você vai adicionar um arquivo .ts com o nome do schematic.
 
-## Installation
+Ex: `src/tools/generator/schematics/nestjs-graphql/nestjs-graphql.schematic.ts`
 
-```bash
-$ npm install
+Schematics são conjuntos de arquivos que fazem parte de módulos individuais.
+Você poderá criar um schematic diferente para cada projeto seu ou para cada contexto diferente em um mesmo projeto.
+
+Dentro desse arquivo separado iremos exportar uma constante com o nome do nosso schematic o valor deverá ser uma instancia da classe Schematic.
+Ex: 
+
+```ts
+import { Schematic } from '../../../../shared/types/models/schematic.model';
+import { SchematicTemplate } from '../../../../shared/types/models/schematic-template.model';
+import { join } from 'path';
+
+
+export const nestjsGraphqlSchematic = new Schematic({
+  name: 'Nestjs Graphql',
+  templates: [
+    new SchematicTemplate({
+      name: 'Service',
+      inputPath: join(__dirname, './templates/template.service.ejs'),
+      outputPath: 'src/%PACKAGE_NAME%/%MODULE_NAME%/%MODULE_NAME%.screen.tsx',
+    }),
+  ],
+});
 ```
 
-## Running the app
 
-```bash
-# development
-$ npm run start
+A classe Schematic recebe dois parâmetros em seu construtor (deve ser único).
+- name: deve ser o nome que irá aparecer no menu de seleção de Schematics;
+- templates: deve ser uma lista de instancias da classe SchematicTemplate. São objetos que definem cada um dos templates de cada Schematic.
 
-# watch mode
-$ npm run start:dev
+### A classe SchematicTemplate
+A classe SchematicTemplate possui 3 parâmetros:
 
-# production mode
-$ npm run start:prod
+- name: O nome que irá aparecer no menu de seleção de templates;
+- inputPath: O diretório absoluto do arquivo .ejs que será renderizado;
+- outputPath: O diretório relativo (de onde o comando foi iniciado) na qual o arquivo será salvo;
+
+Você pode personalizar o nome do arquivo de saída passando variáveis para o parâmetro outputPath, as variáveis disponíveis são:
+
+- MODULE_NAME: O nome do módulo respondido no questionário do CLI;
+- PACKAGE_NAME: O nome do pacote respondido no questionário do CLI;
+
+Todas as variáveis acima são transformadas no padrão kebab-base;
+
+### Arquivos de template
+Usamos a bibliotecas EJS para renderizar os templates, então todos os arquivos de template deverão ser gerados com a extensão .ejs.
+
+Para criar um template você deve acessar o diretório de um Schematic e criar uma pasta chamada templates.
+Dentro dela crie um arquivo com um nome referente ao arquivo final.
+
+Ex: `src/tools/generator/schematics/nestjs-graphql/templates/template.service.ejs`
+
+Nesse exemplo iremos criar um template de um service da biblioteca Nest.js.
+
+Dentro desse arquivo você pode criar começar a criar o seu código.
+
+Ex: `src/tools/generator/schematics/nestjs-graphql/templates/template.service.ejs`
+```
+import { Injectable } from '@nestjs/common';
+
+@Injectable()
+export class <%- pascalCase(moduleName) %>Service {}
 ```
 
-## Test
+#### Variáveis e utilitários
+Existe uma série de váriaveis e utilitários que injetamos para você poder utilizar em arquivos de templates.
 
-```bash
-# unit tests
-$ npm run test
+- moduleName: Nome do módulo respondido no questionário;
+- packageName: Nome do pacote respondido no questionário;
+- titleCase(string): Transforma uma string no padrão titleCase;
+- upperCase(string): Transforma uma string no padrão upperCase;
+- lowerCase(string): Transforma uma string no padrão lowerCase;
+- camelCase(string): Transforma uma string no padrão camelCase;
+- snakeCase(string): Transforma uma string no padrão snakeCase;
+- dotCase(string): Transforma uma string no padrão dotCase;
+- pathCase(string): Transforma uma string no padrão pathCase; 
+- sentenceCase(string): Transforma uma string no padrão sentenceCase; 
+- constantCase(string): Transforma uma string no padrão constantCase;
+- kebabCase(string): Transforma uma string no padrão kebabCase;
+- pascalCase(string): Transforma uma string no padrão pascalCase;
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
