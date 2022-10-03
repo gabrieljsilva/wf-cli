@@ -44,18 +44,14 @@ export class ScaffolderService {
 
   async installNodeModules(path: string) {
     return new Promise((resolve, reject) => {
-      exec(
-        `npm install --legacy-peer-deps`,
-        { cwd: path, maxBuffer: MAX_BUFFER_SIZE },
-        (error) => {
-          if (error) {
-            reject(error);
-            return;
-          }
+      exec(`yarn`, { cwd: path, maxBuffer: MAX_BUFFER_SIZE }, (error) => {
+        if (error) {
+          reject(error);
+          return;
+        }
 
-          resolve(null);
-        },
-      );
+        resolve(null);
+      });
     });
   }
 }

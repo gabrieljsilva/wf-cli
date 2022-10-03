@@ -8,7 +8,7 @@ import * as projects from './domain/projects/projects.json';
 export class ScaffolderMenu {
   @Question({
     name: 'projectName',
-    message: 'Enter the project name: ',
+    message: 'Enter the project name:',
     type: 'input',
   })
   parseProjectName(value: string) {

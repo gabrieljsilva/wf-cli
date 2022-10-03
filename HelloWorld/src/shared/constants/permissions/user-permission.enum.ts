@@ -1,3 +1,0 @@
-export enum USER_PERMISSION {
-  GET_USERS = 'GET_USERS',
-}

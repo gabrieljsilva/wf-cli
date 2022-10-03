@@ -9,8 +9,9 @@
     "wf-cli": "./dist/main.js"
   },
   "scripts": {
-    "prebuild": "rimraf dist",
+    "prebuild": "rimraf dist && npm uninstall wf-cli -g",
     "build": "nest build",
+    "postbuild": "npm install -g .",
     "main": "node dist/main.js main",
     "main:dev": "ts-node ./src/main.ts main",
     "scaffolder:dev": "ts-node ./src/main.ts scaffolder",

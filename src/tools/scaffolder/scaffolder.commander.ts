@@ -22,23 +22,23 @@ export class ScaffolderCommander extends CommandRunner {
   }
 
   async run(args: string[], options: ScaffolderMenuOptions) {
-    const { scaffolderName } =
-      await this.inquirerService.ask<ScaffolderMenuOptions>(
-        Menu.SCAFFOLDER,
-        options,
-      );
+    options &&= await this.inquirerService.ask<ScaffolderMenuOptions>(
+      Menu.SCAFFOLDER,
+      options,
+    );
 
     const project = projects.find(
-      (project) => project.key.toLowerCase() === scaffolderName.toLowerCase(),
+      (project) =>
+        project.key.toLowerCase() === options.scaffolderName.toLowerCase(),
     );
 
     if (!project) {
-      console.error(`cannot find project: ${scaffolderName}`);
+      console.error(`cannot find project: ${options.scaffolderName}`);
       process.exit(1);
     }
 
     if (!project.url) {
-      console.error(`url of project: ${scaffolderName} not defined!`);
+      console.error(`url of project: ${options.scaffolderName} not defined!`);
       process.exit(1);
     }
 

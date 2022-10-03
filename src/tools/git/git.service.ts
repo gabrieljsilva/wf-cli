@@ -18,7 +18,6 @@ export class GitService {
 
   async deleteRepository(path: string) {
     const repositoryPath = join(path, '/.git');
-    // console.log(repositoryPath);
     fs.rmSync(repositoryPath, { recursive: true });
   }
 }
