@@ -24,6 +24,8 @@ export class ScaffolderService {
     this.spinner.start('Cloning repository...');
 
     await this.gitService.clone(project.url, projectName);
+    await this.gitService.deleteRepository(join(process.cwd(), projectName));
+
     this.spinner.succeed('Repository cloned successfully!');
     this.spinner.start(
       `Installing dependencies. This may take a few minutes, take a coffee while this process is running!`,

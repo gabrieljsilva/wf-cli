@@ -1,0 +1,41 @@
+version: "3.7"
+
+services:
+  gql-postgres: 
+    container_name: gql-postgres
+    image: postgres
+    ports:
+      - 5432:${DB_PORT}
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - postgres:/data/postgres
+    networks: 
+      - base
+
+  redisdb:
+    image: redis:6.2.0
+    networks:
+      - base
+
+  api_v1:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./:/source
+    ports:
+      - 3000:3000
+    networks:
+      - base
+    depends_on:
+      - gql-postgres
+      - redisdb
+
+networks:
+  base:
+
+volumes:
+  postgres:

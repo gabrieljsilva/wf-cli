@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { simpleGit } from 'simple-git';
+import { join } from 'path';
+import * as fs from 'fs';
 
 @Injectable()
 export class GitService {
@@ -12,5 +14,11 @@ export class GitService {
         resolve(data);
       });
     });
+  }
+
+  async deleteRepository(path: string) {
+    const repositoryPath = join(path, '/.git');
+    // console.log(repositoryPath);
+    fs.rmSync(repositoryPath, { recursive: true });
   }
 }
