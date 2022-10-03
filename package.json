@@ -13,6 +13,7 @@
     "build": "nest build",
     "main": "node dist/main.js main",
     "main:dev": "ts-node ./src/main.ts main",
+    "scaffolder:dev": "ts-node ./src/main.ts scaffolder",
     "generator:dev": "ts-node ./src/main.ts generator",
     "generator": "node dist/main.js generator"
   },
@@ -32,6 +33,7 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
+    "simple-git": "^3.14.1",
     "title-case": "^3.0.3",
     "upper-case": "^2.0.2"
   },

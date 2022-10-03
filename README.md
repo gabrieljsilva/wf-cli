@@ -23,8 +23,8 @@ Inside this file you must export a constant with the name of the schematic, the 
 
 Ex:
 ```ts
-import { Schematic } from '../../../../shared/types/models/schematic.model';
-import { SchematicTemplate } from '../../../../shared/types/models/schematic-template.model';
+import { Schematic } from '../../../../shared/domain/models/schematic.model';
+import { SchematicTemplate } from '../../../../shared/domain/models/schematic-template.model';
 import { join } from 'path';
 
 

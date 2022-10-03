@@ -3,12 +3,14 @@ import { Menu, Tool } from '../../shared/types';
 import { CommandRunner, InquirerService } from 'nest-commander';
 import { GeneratorCommander } from '../generator';
 import { MainMenuInput } from './domain';
+import { ScaffolderCommander } from '../scaffolder';
 
 @Injectable()
 export class MainService {
   constructor(
     private readonly inquirerService: InquirerService,
     private readonly generatorCommander: GeneratorCommander,
+    private readonly scaffolderCommander: ScaffolderCommander,
   ) {}
 
   async showMainMenu() {
@@ -21,6 +23,7 @@ export class MainService {
     await commander.run([], {});
   }
 
+  //todo remove this
   async executeToolCLI(tool: Tool) {
     console.log(`executing ${tool} commander`);
   }
@@ -36,6 +39,7 @@ export class MainService {
   private get commanders() {
     return {
       [Tool.GENERATOR]: this.generatorCommander,
+      [Tool.SCAFFOLDER]: this.scaffolderCommander,
     };
   }
 }

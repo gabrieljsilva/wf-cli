@@ -1,0 +1,12 @@
+[
+  {
+    "label": "Nestjs + GraphQL + Typeorm",
+    "key": "nestjs_graphql_typeorm",
+    "url": "https://github.com/gabrieljsilva/nestjs-graphql-boilerplate"
+  },
+  {
+    "label": "React + MUI 5",
+    "key": "react_mui_5",
+    "url": "https://github.com/gabrieljsilva/ts-react-auth"
+  }
+]
