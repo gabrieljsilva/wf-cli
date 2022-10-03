@@ -4,12 +4,9 @@ import {
   InquirerService,
   Option,
 } from 'nest-commander';
-import { simpleGit } from 'simple-git';
-import { join } from 'path';
 import { Menu, Tool } from '../../shared/types';
 import { ScaffolderMenuOptions } from './domain';
 import * as projects from './domain/projects/projects.json';
-import * as fs from 'fs';
 import { ScaffolderService } from './scaffolder.service';
 
 @Command({
@@ -25,7 +22,7 @@ export class ScaffolderCommander extends CommandRunner {
   }
 
   async run(args: string[], options: ScaffolderMenuOptions) {
-    const { projectName, scaffolderName } =
+    const { scaffolderName } =
       await this.inquirerService.ask<ScaffolderMenuOptions>(
         Menu.SCAFFOLDER,
         options,
@@ -45,22 +42,7 @@ export class ScaffolderCommander extends CommandRunner {
       process.exit(1);
     }
 
-    const pathThatProjectWillBeSaved = join(process.cwd(), projectName);
-
-    const projectAlreadyExists = fs.existsSync(pathThatProjectWillBeSaved);
-
-    if (projectAlreadyExists) {
-      console.log(`project: ${projectName} already exists, use another name!`);
-      process.exit(1);
-    }
-
-    simpleGit().clone(project.url, pathThatProjectWillBeSaved, {}, async () => {
-      const res = await this.scaffolderService.installModules(
-        pathThatProjectWillBeSaved,
-      );
-
-      console.log(res);
-    });
+    await this.scaffolderService.scaffoldProject(project, options);
   }
 
   @Option({
