@@ -4,12 +4,14 @@ import { join } from 'path';
 import * as ora from 'ora';
 import * as fs from 'fs';
 import { renderFile } from 'ejs';
+import { exec } from 'child_process';
 import { GeneratorMenuOptions, SelectTemplateMenuOptions } from './domain';
 import { Menu } from '../../shared/types';
 import { validateOrThrowError } from '../../shared/utils';
 import * as caseModifiers from '../../shared/utils/case-modifiers';
 import * as availableSchematics from './schematics';
 import { Schematic } from '../../shared/types/models/schematic.model';
+import { MAX_BUFFER_SIZE } from '../../shared/constants';
 
 @Injectable()
 export class GeneratorService {
@@ -33,6 +35,18 @@ export class GeneratorService {
     }
 
     await this.renderTemplateAndSaveFile(schematic, options);
+
+    this.spinner.succeed('Module created successfully!');
+    this.spinner.start('Running Prettier...');
+
+    try {
+      await this.runPrettier();
+      this.spinner.succeed('Now your code is beautiful!');
+    } catch {
+      this.spinner.warn(
+        'cannot run prettier, maybe it not exists in this project!',
+      );
+    }
   }
 
   async renderTemplateAndSaveFile(
@@ -89,5 +103,21 @@ export class GeneratorService {
     paths.pop();
     const foldersPaths = paths.join('/');
     fs.mkdirSync(foldersPaths, { recursive: true });
+  }
+
+  async runPrettier() {
+    return new Promise((resolve, reject) => {
+      exec(
+        'npx prettier ./src/** --write',
+        { maxBuffer: MAX_BUFFER_SIZE, cwd: process.cwd() },
+        (error) => {
+          if (error) {
+            reject(error);
+          }
+
+          resolve(null);
+        },
+      );
+    });
   }
 }
