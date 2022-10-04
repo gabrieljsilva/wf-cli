@@ -1,16 +1,23 @@
 import { Injectable } from '@nestjs/common';
-import { exec } from 'child_process';
 import { join } from 'path';
 import { existsSync } from 'fs';
 import * as ora from 'ora';
 import { Project, ScaffolderMenuOptions } from './domain';
 import { GitService } from '../git';
-import { MAX_BUFFER_SIZE } from '../../shared/constants';
+import { PackageManagerService } from '../package-manager';
+import { PackageManager } from '../package-manager/domain/types/package-manager.enum';
+import { InquirerService } from 'nest-commander';
+import { Menu } from '../../shared/types';
+import { PackageManagerMenuOptions } from '../package-manager/domain/types/package-manager-menu-options';
 
 @Injectable()
 export class ScaffolderService {
   spinner = ora();
-  constructor(private readonly gitService: GitService) {}
+  constructor(
+    private readonly gitService: GitService,
+    private readonly packageManagerService: PackageManagerService,
+    private readonly inquirerService: InquirerService,
+  ) {}
 
   async scaffoldProject(project: Project, options: ScaffolderMenuOptions) {
     const { projectName } = options;
@@ -21,6 +28,12 @@ export class ScaffolderService {
       process.exit(1);
     }
 
+    const { packageManager } =
+      await this.inquirerService.ask<PackageManagerMenuOptions>(
+        Menu.SELECT_PACKAGE_MANAGER,
+        {},
+      );
+
     this.spinner.start('Cloning repository...');
 
     await this.gitService.clone(project.url, projectName);
@@ -30,8 +43,9 @@ export class ScaffolderService {
     this.spinner.start(
       `Installing dependencies. This may take a few minutes, take a coffee while this process is running!`,
     );
+
     try {
-      await this.installNodeModules(outputPath);
+      await this.installNodeModules(outputPath, packageManager);
       this.spinner.succeed(`Modules installed successfully!`);
     } catch (e) {
       this.spinner.fail('Install dependencies failed!');
@@ -42,11 +56,7 @@ export class ScaffolderService {
     );
   }
 
-  async installNodeModules(path: string) {
-    return new Promise((resolve, reject) => {
-      exec(`yarn`, { cwd: path, maxBuffer: MAX_BUFFER_SIZE }, (error) => {
-        error ? reject(error) : resolve(null);
-      });
-    });
+  async installNodeModules(path: string, manager: PackageManager) {
+    return this.packageManagerService.installModules(path, manager);
   }
 }
