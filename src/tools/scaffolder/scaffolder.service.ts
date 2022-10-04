@@ -17,7 +17,7 @@ export class ScaffolderService {
     const outputPath = join(process.cwd(), `./${projectName}`);
     const projectAlreadyExists = existsSync(outputPath);
     if (projectAlreadyExists) {
-      console.log(`project: ${projectName} already exists, use another name!`);
+      console.log(`Project: ${projectName} already exists, use another name!`);
       process.exit(1);
     }
 
