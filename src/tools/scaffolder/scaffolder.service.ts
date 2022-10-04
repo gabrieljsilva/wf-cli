@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { exec } from 'child_process';
-import { Project, ScaffolderMenuOptions } from './domain';
 import { join } from 'path';
 import { existsSync } from 'fs';
-import { GitService } from '../git';
 import * as ora from 'ora';
+import { Project, ScaffolderMenuOptions } from './domain';
+import { GitService } from '../git';
 import { MAX_BUFFER_SIZE } from '../../shared/constants';
 
 @Injectable()
@@ -14,8 +14,8 @@ export class ScaffolderService {
 
   async scaffoldProject(project: Project, options: ScaffolderMenuOptions) {
     const { projectName } = options;
-    const pathThatProjectWillBeSaved = join(process.cwd(), `./${projectName}`);
-    const projectAlreadyExists = existsSync(pathThatProjectWillBeSaved);
+    const outputPath = join(process.cwd(), `./${projectName}`);
+    const projectAlreadyExists = existsSync(outputPath);
     if (projectAlreadyExists) {
       console.log(`project: ${projectName} already exists, use another name!`);
       process.exit(1);
@@ -24,14 +24,14 @@ export class ScaffolderService {
     this.spinner.start('Cloning repository...');
 
     await this.gitService.clone(project.url, projectName);
-    await this.gitService.deleteRepository(join(process.cwd(), projectName));
+    await this.gitService.deleteRepository(outputPath);
 
     this.spinner.succeed('Repository cloned successfully!');
     this.spinner.start(
       `Installing dependencies. This may take a few minutes, take a coffee while this process is running!`,
     );
     try {
-      await this.installNodeModules(pathThatProjectWillBeSaved);
+      await this.installNodeModules(outputPath);
       this.spinner.succeed(`Modules installed successfully!`);
     } catch (e) {
       this.spinner.fail('Install dependencies failed!');
@@ -45,12 +45,7 @@ export class ScaffolderService {
   async installNodeModules(path: string) {
     return new Promise((resolve, reject) => {
       exec(`yarn`, { cwd: path, maxBuffer: MAX_BUFFER_SIZE }, (error) => {
-        if (error) {
-          reject(error);
-          return;
-        }
-
-        resolve(null);
+        error ? reject(error) : resolve(null);
       });
     });
   }
