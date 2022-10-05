@@ -7,6 +7,7 @@ export class SchematicTemplate<
   inputPath: string;
   outputPath: string;
   variables?: T;
+  useBarrelExport?: boolean;
 
   constructor(params: Omit<SchematicTemplate<T>, 'variables'>) {
     this.name = params.name;

@@ -7,7 +7,12 @@ import { renderFile } from 'ejs';
 import { exec } from 'child_process';
 import { GeneratorMenuOptions, SelectTemplateMenuOptions } from './domain';
 import { Menu } from '../../shared/types';
-import { validateOrThrowError } from '../../shared/utils';
+import {
+  getDirectoryByFilePath,
+  getFileNameByPath,
+  kebabCase,
+  validateOrThrowError,
+} from '../../shared/utils';
 import * as caseModifiers from '../../shared/utils/case-modifiers';
 import * as availableSchematics from './schematics';
 import { Schematic } from '../../shared/types/models/schematic.model';
@@ -34,7 +39,7 @@ export class GeneratorService {
       process.exit(1);
     }
 
-    await this.renderTemplateAndSaveFile(schematic, options);
+    await this.renderTemplatesAndSaveFile(schematic, options);
 
     this.spinner.succeed('Module created successfully!');
     this.spinner.start('Running Prettier...');
@@ -49,7 +54,7 @@ export class GeneratorService {
     }
   }
 
-  async renderTemplateAndSaveFile(
+  async renderTemplatesAndSaveFile(
     schematic: Schematic,
     options: GeneratorMenuOptions,
   ) {
@@ -87,6 +92,15 @@ export class GeneratorService {
       fs.writeFileSync(outputFilePath, fileString);
 
       this.spinner.succeed(`${template.name} created successfully!`);
+
+      if (template.useBarrelExport) {
+        const templateDirectory = getDirectoryByFilePath(outputFilePath);
+
+        await this.appendExportPathToBarrelFile(
+          templateDirectory,
+          getFileNameByPath(outputFilePath),
+        );
+      }
     }
   }
 
@@ -99,10 +113,8 @@ export class GeneratorService {
   }
 
   createFoldersFromPathString(string: string) {
-    const paths = string.split('/');
-    paths.pop();
-    const foldersPaths = paths.join('/');
-    fs.mkdirSync(foldersPaths, { recursive: true });
+    const directory = getDirectoryByFilePath(string);
+    fs.mkdirSync(directory, { recursive: true });
   }
 
   async runPrettier() {
@@ -119,5 +131,27 @@ export class GeneratorService {
         },
       );
     });
+  }
+
+  async createBarrelFileAndAppendExportPath(path: string, fileName: string) {
+    const indexFilePath = join(path, 'index.ts');
+    fs.writeFileSync(indexFilePath, `export * from './${fileName}'`);
+    return fs.existsSync(indexFilePath);
+  }
+
+  async appendExportPathToBarrelFile(path: string, fileName: string) {
+    const indexFilePath = join(path, 'index.ts');
+    const indexFileExists = fs.existsSync(indexFilePath);
+
+    const [moduleName, moduleType] = fileName.split('.');
+    const parsedModuleName = [kebabCase(moduleName), moduleType].join('.');
+
+    if (indexFileExists) {
+      fs.writeFileSync(indexFilePath, `export * from './${parsedModuleName}'`, {
+        flag: 'a',
+      });
+    } else {
+      return this.createBarrelFileAndAppendExportPath(path, parsedModuleName);
+    }
   }
 }

@@ -26,6 +26,7 @@ export const nestjsGraphQlPrisma = new Schematic({
       name: 'Model',
       inputPath: join(__dirname, './templates/model.template.ejs'),
       outputPath: 'src/domain/models/%MODULE_NAME%.model.ts',
+      useBarrelExport: true,
     },
   ],
 });
