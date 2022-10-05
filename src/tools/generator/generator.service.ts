@@ -135,7 +135,7 @@ export class GeneratorService {
 
   async createBarrelFileAndAppendExportPath(path: string, fileName: string) {
     const indexFilePath = join(path, 'index.ts');
-    fs.writeFileSync(indexFilePath, `export * from './${fileName}'`);
+    fs.writeFileSync(indexFilePath, `export * from './${fileName}'\n`);
     return fs.existsSync(indexFilePath);
   }
 
@@ -147,9 +147,13 @@ export class GeneratorService {
     const parsedModuleName = [kebabCase(moduleName), moduleType].join('.');
 
     if (indexFileExists) {
-      fs.writeFileSync(indexFilePath, `export * from './${parsedModuleName}'`, {
-        flag: 'a',
-      });
+      fs.writeFileSync(
+        indexFilePath,
+        `export * from './${parsedModuleName}'\n`,
+        {
+          flag: 'a',
+        },
+      );
     } else {
       return this.createBarrelFileAndAppendExportPath(path, parsedModuleName);
     }
