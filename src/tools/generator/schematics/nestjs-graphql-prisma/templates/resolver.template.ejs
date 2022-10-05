@@ -1,0 +1,5 @@
+import { Resolver } from '@nestjs/graphql';
+import { <%- pascalCase(moduleName) %> } from '@models';
+
+@Resolver(<%- pascalCase(moduleName) %>)
+export class <%- pascalCase(moduleName) %>Resolver {}

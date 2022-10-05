@@ -33,7 +33,7 @@ export const nestjsGraphqlSchematic = new Schematic({
   templates: [
     new SchematicTemplate({
       name: 'Service',
-      inputPath: join(__dirname, './templates/template.service.ejs'),
+      inputPath: join(__dirname, './templates/service.template.ejs'),
       outputPath: 'src/%PACKAGE_NAME%/%MODULE_NAME%/%MODULE_NAME%.screen.tsx',
     }),
   ],

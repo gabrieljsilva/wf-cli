@@ -1,2 +1,2 @@
 export * from './react-vanilla';
-export * from './nest-graphql';
+export * from './nestjs-graphql-prisma';
