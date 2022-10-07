@@ -44,14 +44,8 @@ export class GeneratorService {
     this.spinner.succeed('Module created successfully!');
     this.spinner.start('Running Prettier...');
 
-    try {
-      await this.runPrettier();
-      this.spinner.succeed('Now your code is beautiful!');
-    } catch {
-      this.spinner.warn(
-        'cannot run prettier, maybe it not exists in this project!',
-      );
-    }
+    await this.runPrettier();
+    this.spinner.succeed('Now you can edit your module 😀');
   }
 
   async renderTemplatesAndSaveFile(
@@ -118,17 +112,11 @@ export class GeneratorService {
   }
 
   async runPrettier() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       exec(
         'npx prettier ./src/** --write',
         { maxBuffer: MAX_BUFFER_SIZE, cwd: process.cwd() },
-        (error) => {
-          if (error) {
-            reject(error);
-          }
-
-          resolve(null);
-        },
+        () => resolve(null),
       );
     });
   }
