@@ -1,5 +1,10 @@
 [
   {
+    "label": "Nestjs + GraphQL + Prisma",
+    "key": "nestjs_graphql_prisma",
+    "url": "https://github.com/gabrieljsilva/nestjs-graphql-prisma"
+  },
+  {
     "label": "Nestjs + GraphQL + Typeorm",
     "key": "nestjs_graphql_typeorm",
     "url": "https://github.com/gabrieljsilva/nestjs-graphql-boilerplate"
