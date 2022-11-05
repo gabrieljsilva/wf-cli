@@ -1,7 +1,9 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { FilterableField } from '@decorators';
 
 @ObjectType()
 export class <%- pascalCase(moduleName) %> {
     @Field()
+    @FilterableField()
     id: number;
 }
