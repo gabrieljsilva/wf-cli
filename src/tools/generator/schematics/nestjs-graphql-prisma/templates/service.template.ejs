@@ -8,7 +8,7 @@ import { PaginationInput } from '../../../../utils/graphql';
 export class <%- pascalCase(moduleName) %>Service {
     constructor(private readonly prismaService: PrismaService) {}
 
-    async createPlayer(create<%- pascalCase(moduleName) %>Dto: Create<%- pascalCase(moduleName) %>Dto) {
+    async create<%- pascalCase(moduleName) %>(create<%- pascalCase(moduleName) %>Dto: Create<%- pascalCase(moduleName) %>Dto) {
         //
     }
 
