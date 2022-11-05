@@ -1,4 +1,18 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from '@prisma/module';
+import { Create<%- pascalCase(moduleName) %>Dto } from '@dtos';
+import { <%- pascalCase(moduleName) %>Filters } from '@filters';
+import { PaginationInput } from '../../../../utils/graphql';
 
 @Injectable()
-export class <%- pascalCase(moduleName) %>Service {}
+export class <%- pascalCase(moduleName) %>Service {
+    constructor(private readonly prismaService: PrismaService) {}
+
+    async createPlayer(create<%- pascalCase(moduleName) %>Dto: Create<%- pascalCase(moduleName) %>Dto) {
+        //
+    }
+
+    async findMany<%- pascalCase(moduleName) %>(pagination: PaginationInput, filters: <%- pascalCase(moduleName) %>Filters) {
+        //
+    }
+}

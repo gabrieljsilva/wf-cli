@@ -1,5 +1,8 @@
 import { Resolver } from '@nestjs/graphql';
 import { <%- pascalCase(moduleName) %> } from '@models';
+import { <%- pascalCase(moduleName) %>Service } from './player.service';
 
 @Resolver(<%- pascalCase(moduleName) %>)
-export class <%- pascalCase(moduleName) %>Resolver {}
+export class <%- pascalCase(moduleName) %>Resolver {
+    constructor(private readonly <%- camelCase(moduleName) %>Service: <%- pascalCase(moduleName) %>Service) {}
+}

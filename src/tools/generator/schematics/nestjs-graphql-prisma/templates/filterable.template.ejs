@@ -1,0 +1,6 @@
+import { FilterableOf } from '../../utils/graphql/filterable';
+import { InputType } from '@nestjs/graphql';
+import { <%- pascalCase(moduleName) %> } from '@models';
+
+@InputType()
+export class <%- pascalCase(moduleName) %>Filters extends FilterableOf(<%- pascalCase(moduleName) %>) {}

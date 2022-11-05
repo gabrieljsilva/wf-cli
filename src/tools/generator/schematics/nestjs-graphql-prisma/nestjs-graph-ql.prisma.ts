@@ -31,5 +31,17 @@ export const nestjsGraphQlPrisma = new Schematic({
       outputPath: 'src/domain/models/%MODULE_NAME%.model.ts',
       useBarrelExport: true,
     },
+    {
+      name: 'Filterable',
+      inputPath: join(__dirname, './templates/filterable.template.ejs'),
+      outputPath: 'src/domain/filters/%MODULE_NAME%.filters.ts',
+      useBarrelExport: true,
+    },
+    {
+      name: 'Create DTO',
+      inputPath: join(__dirname, './templates/create-dto.template.ejs'),
+      outputPath: 'src/domain/dtos/%MODULE_NAME%/create-%MODULE_NAME%.dto.ts',
+      useBarrelExport: true,
+    },
   ],
 });
