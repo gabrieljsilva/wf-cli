@@ -1,8 +1,35 @@
-import { Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { PaginationInput } from '../../../../utils/graphql';
 import { <%- pascalCase(moduleName) %> } from '@models';
 import { <%- pascalCase(moduleName) %>Service } from './<%- kebabCase(moduleName) %>.service';
+import { Create<%- pascalCase(moduleName) %>Dto, Update<%- pascalCase(moduleName) %>Dto } from '@dtos';
+import { <%- pascalCase(moduleName) %>Filters } from '@filters';
+import { <%- pascalCase(moduleName) %>Paginated } from '@paginations';
 
 @Resolver(<%- pascalCase(moduleName) %>)
 export class <%- pascalCase(moduleName) %>Resolver {
     constructor(private readonly <%- camelCase(moduleName) %>Service: <%- pascalCase(moduleName) %>Service) {}
+
+    @Mutation(() => <%- pascalCase(moduleName) %>)
+    async create<%- pascalCase(moduleName) %>(@Args('create<%- pascalCase(moduleName) %>Input') create<%- pascalCase(moduleName) %>Dto: Create<%- pascalCase(moduleName) %>Dto) {
+        return this.<%- camelCase(moduleName) %>Service.create<%- pascalCase(moduleName) %>(create<%- pascalCase(moduleName) %>Dto);
+    }
+
+    @Query(() => <%- pascalCase(moduleName) %>Paginated)
+    async findMany<%- pascalCase(moduleName) %>(
+        @Args('pagination') pagination: PaginationInput,
+        @Args('filters') filters: <%- pascalCase(moduleName) %>Filters,
+    ) {
+        return this.<%- camelCase(moduleName) %>Service.findMany<%- pascalCase(moduleName) %>(pagination, filters);
+    }
+
+    @Mutation(() => <%- pascalCase(moduleName) %>)
+    async delete<%- pascalCase(moduleName) %>(@Args('<%- camelCase(moduleName) %>Id') <%- camelCase(moduleName) %>Id: string) {
+        return this.<%- camelCase(moduleName) %>Service.delete<%- pascalCase(moduleName) %>ById(<%- camelCase(moduleName) %>Id);
+    }
+
+    @Mutation(() => <%- pascalCase(moduleName) %>)
+    async update<%- pascalCase(moduleName) %>(@Args('update<%- pascalCase(moduleName) %>Input') update<%- pascalCase(moduleName) %>Dto: Update<%- pascalCase(moduleName) %>Dto) {
+        return this.<%- camelCase(moduleName) %>Service.update<%- pascalCase(moduleName) %>(update<%- pascalCase(moduleName) %>Dto);
+    }
 }
