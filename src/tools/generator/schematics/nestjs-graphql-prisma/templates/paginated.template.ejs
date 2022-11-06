@@ -1,0 +1,6 @@
+import { ObjectType } from '@nestjs/graphql';
+import { Paginated } from '../../utils/graphql';
+import { <%- pascalCase(moduleName) %> } from '@models';
+
+@ObjectType()
+export class <%- pascalCase(moduleName) %>Paginated extends Paginated(<%- pascalCase(moduleName) %>) {}

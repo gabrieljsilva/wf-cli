@@ -3,16 +3,49 @@ import { PrismaService } from '@prisma/module';
 import { Create<%- pascalCase(moduleName) %>Dto } from '@dtos';
 import { <%- pascalCase(moduleName) %>Filters } from '@filters';
 import { PaginationInput } from '../../../../utils/graphql';
+import { PrismaFilterAdapter } from '../../../../utils/adapters';
+import { <%- pascalCase(moduleName) %>Paginated } from '@paginations';
+import { AlreadyExistsException } from '@exceptions';
+import { RESOURCE } from '@enums';
 
 @Injectable()
 export class <%- pascalCase(moduleName) %>Service {
-    constructor(private readonly prismaService: PrismaService) {}
+    constructor(private readonly prisma: PrismaService) {}
 
     async create<%- pascalCase(moduleName) %>(create<%- pascalCase(moduleName) %>Dto: Create<%- pascalCase(moduleName) %>Dto) {
-        //
+        const <%- camelCase(moduleName) %>AlreadyExists = await this.prisma.<%- camelCase(moduleName) %>.findUnique({
+            where: {
+                // set criteria here
+            },
+        });
+        if (<%- camelCase(moduleName) %>AlreadyExists) {
+            throw new AlreadyExistsException(RESOURCE.<%- upperCase(moduleName) %>, {
+                // used criteria here
+            });
+        }
+        return this.prisma.<%- camelCase(moduleName) %>.create({
+            data: create<%- pascalCase(moduleName) %>Dto,
+        });
     }
 
     async findMany<%- pascalCase(moduleName) %>(pagination: PaginationInput, filters: <%- pascalCase(moduleName) %>Filters) {
-        //
+        const { limit, offset } = pagination;
+        const prismaAdapter = new PrismaFilterAdapter();
+
+        const <%- camelCase(moduleName) %> = await this.prisma.<%- camelCase(moduleName) %>.findMany({
+            take: limit,
+            skip: offset,
+            where: filters && prismaAdapter.getQuery(filters),
+        });
+
+        const count = await this.prisma.<%- camelCase(moduleName) %>.count({
+            where: filters && prismaAdapter.getQuery(filters),
+        });
+
+        return new <%- pascalCase(moduleName) %>Paginated(<%- camelCase(moduleName) %>, {
+            limit,
+            offset,
+            totalItemsCount: count,
+        });
     }
 }

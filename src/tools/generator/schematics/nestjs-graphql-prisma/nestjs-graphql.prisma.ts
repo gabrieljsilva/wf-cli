@@ -1,7 +1,7 @@
 import { Schematic } from '../../../../shared/types/models/schematic.model';
 import { join } from 'path';
 
-export const nestjsGraphQlPrisma = new Schematic({
+export const nestjsGraphqlPrisma = new Schematic({
   name: 'NestJS GraphQL With Prisma',
   templates: [
     {
@@ -35,6 +35,18 @@ export const nestjsGraphQlPrisma = new Schematic({
       name: 'Filterable',
       inputPath: join(__dirname, './templates/filterable.template.ejs'),
       outputPath: 'src/domain/filters/%MODULE_NAME%.filters.ts',
+      useBarrelExport: true,
+    },
+    {
+      name: 'Prisma Model',
+      inputPath: join(__dirname, './templates/prisma-model.template.ejs'),
+      outputPath: 'src/infra/database/prisma/models/%MODULE_NAME%.prisma',
+      useBarrelExport: false,
+    },
+    {
+      name: 'Pagination',
+      inputPath: join(__dirname, './templates/paginated.template.ejs'),
+      outputPath: 'src/domain/paginations/%MODULE_NAME%.paginated.ts',
       useBarrelExport: true,
     },
     {

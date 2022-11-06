@@ -1,1 +1,1 @@
-export * from './nestjs-graph-ql.prisma';
+export * from './nestjs-graphql.prisma';

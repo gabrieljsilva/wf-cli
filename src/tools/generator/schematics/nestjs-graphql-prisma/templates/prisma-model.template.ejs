@@ -1,0 +1,5 @@
+model <%- pascalCase(moduleName) %> {
+    id       String            @id @default(uuid())
+
+    @@map("<%- snakeCase(moduleName) %>")
+}
