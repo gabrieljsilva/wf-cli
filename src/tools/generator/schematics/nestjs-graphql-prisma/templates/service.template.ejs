@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@prisma/module';
-import { Create<%- pascalCase(moduleName) %>Dto } from '@dtos';
+import { Create<%- pascalCase(moduleName) %>Dto, Update<%- pascalCase(moduleName) %>Dto } from '@dtos';
 import { <%- pascalCase(moduleName) %>Filters } from '@filters';
 import { PaginationInput } from '../../../../utils/graphql';
 import { PrismaFilterAdapter } from '../../../../utils/adapters';
 import { <%- pascalCase(moduleName) %>Paginated } from '@paginations';
-import { AlreadyExistsException } from '@exceptions';
+import { AlreadyExistsException, NotFoundException } from '@exceptions';
 import { RESOURCE } from '@enums';
 
 @Injectable()
@@ -47,5 +47,30 @@ export class <%- pascalCase(moduleName) %>Service {
             offset,
             totalItemsCount: count,
         });
+    }
+
+    async delete<%- pascalCase(moduleName) %>ById(id: string) {
+        const <%- camelCase(moduleName) %> = await this.prisma.<%- camelCase(moduleName) %>.findUnique({
+            where: { id },
+        });
+        if (!<%- camelCase(moduleName) %>) {
+            throw new NotFoundException(RESOURCE.<%- upperCase(moduleName) %>, { id });
+        }
+        await this.prisma.<%- camelCase(moduleName) %>.delete({ where: { id } });
+        return <%- camelCase(moduleName) %>;
+    }
+
+    async update<%- pascalCase(moduleName) %>({ id, ...dataToUpdate }: Update<%- pascalCase(moduleName) %>Dto) {
+        const <%- camelCase(moduleName) %> = await this.prisma.<%- camelCase(moduleName) %>.findUnique({
+            where: { id },
+        });
+        if (!<%- camelCase(moduleName) %>) {
+            throw new NotFoundException(RESOURCE.<%- upperCase(moduleName) %>, { id: <%- camelCase(moduleName) %>.id });
+        }
+        await this.prisma.<%- camelCase(moduleName) %>.update({
+            where: { id: id },
+            data: dataToUpdate,
+        });
+        return <%- camelCase(moduleName) %>;
     }
 }

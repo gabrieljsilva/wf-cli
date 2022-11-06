@@ -55,5 +55,11 @@ export const nestjsGraphqlPrisma = new Schematic({
       outputPath: 'src/domain/dtos/%MODULE_NAME%/create-%MODULE_NAME%.dto.ts',
       useBarrelExport: true,
     },
+    {
+      name: 'Update DTO',
+      inputPath: join(__dirname, './templates/update-dto.template.ejs'),
+      outputPath: 'src/domain/dtos/%MODULE_NAME%/update-%MODULE_NAME%.dto.ts',
+      useBarrelExport: true,
+    },
   ],
 });
